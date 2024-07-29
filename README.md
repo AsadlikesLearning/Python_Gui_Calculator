@@ -6,10 +6,11 @@ Addition
 Subtraction
 Multiplication
 Division
-Exponentiation (Power)
 Integer Division and Remainder
 Requirements
 Python 3.x
 How to Run
-Make sure you have Python installed on your machine. You can download it from python.org.
+Make sure you have Python installed on your machine.
+
+You can download it from python.org.
 
