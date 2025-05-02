@@ -1,0 +1,30 @@
+name: InstallPythonCalculator
+description: Installs Python GUI Calculator with XFCE and VNC
+schemaVersion: 1.0
+phases:
+  - name: build
+    steps:
+      - name: InstallDependencies
+        action: ExecuteBash
+        inputs:
+          commands:
+            - yum update -y
+            - yum install -y python3 python3-tkinter xfce4 xfce4-terminal tigervnc-server
+      - name: CopyApp
+        action: ExecuteBash
+        inputs:
+          commands:
+            - mkdir -p /opt/calculator
+            - cp /tmp/Python_Gui_Calculator/Calculator.py /opt/calculator/
+      - name: ConfigureVNC
+        action: ExecuteBash
+        inputs:
+          commands:
+            - echo "vncserver :1 && python3 /opt/calculator/Calculator.py" > /opt/calculator/start.sh
+            - chmod +x /opt/calculator/start.sh
+      - name: SetUpService
+        action: ExecuteBash
+        inputs:
+          commands:
+            - echo "[Unit]\nDescription=Calculator App with VNC\nAfter=network.target\n\n[Service]\nExecStart=/opt/calculator/start.sh\nRestart=always\nUser=ec2-user\n\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/calculator.service
+            - systemctl enable calculator.service
